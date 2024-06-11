@@ -1,12 +1,12 @@
 {
-  "binance_api_key": "dEzI9K76ANvyc6AKe0REySZZMf6OsBYRb7GWcEuRcwwXXe3ng6Whvq2KXDP4MDVN",
-  "binance_secret_key": "bCKxLneW9VbuR4vXxUjRzswSO1wJXJuigm6CfuN7fqx7esAIxeobaBrDc51Pr5tj",
+  "binance_api_key": "YOUR_API_KEY",
+  "binance_secret_key": "YOUR_SECRET_KEY",
   "database_connection": {"host": "localhost",  "user": "root", "password": "toor"},
   "database_name": "order_book",
   "period_of_time": 60,
   "vol_diff_limit": 50,
 
-  "tg_bot_token": "7371063321:AAGHJc0toyAp1jERhkdFaW9Af-6Fjr6xU_s",
-  "tg_chat_id": "-4263450976"
+  "tg_bot_token": "YOUR_TOKEN",
+  "tg_chat_id": "YOUR_ID"
 
 }
