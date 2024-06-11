@@ -30,7 +30,7 @@ The system consists of the following main components:
 1. Clone the project repository:
 
 ```bash
-git clone https://github.com/L-Mykola/binance-orderbook-monitoring-system
+git clone https://github.com/L-Mykola/binance-orderbook-monitoring-system.git
 ```
 
 2. Install the required dependencies:
