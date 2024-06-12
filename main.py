@@ -4,6 +4,7 @@ import datetime
 from db_handler import insert_into_table, get_values
 import json
 import telegram
+import logging
 
 
 with open('settings.json') as settings_file:
@@ -18,6 +19,8 @@ with open('settings.json') as settings_file:
 
     TOKEN = SETTINGS['tg_bot_token']
     CHAT_ID = SETTINGS['tg_chat_id']
+
+logging.basicConfig(filename='performance.log', level=logging.INFO)
 
 
 def calculate_weight(record_at):
@@ -41,7 +44,10 @@ async def monitoring(client, symbol):
 
     async with dcm as dcm_socket:
         while True:
+            start_time = datetime.datetime.now()
             depth_cache = await dcm_socket.recv()
+            end_time = datetime.datetime.now()
+            logging.info(f"Binance data {symbol} retrieval time: {end_time - start_time} seconds")
             time = datetime.datetime.now().strftime("%H:%M:%S")
 
             bids = depth_cache.get_bids()[:100]
@@ -67,8 +73,12 @@ async def monitoring(client, symbol):
                     volumes_minus_2 += item[1]
 
             values = (symbol, avg_price, volumes_plus_2, volumes_minus_2)
+            start_time = datetime.datetime.now()
             insert_into_table(conn=CONNECTION, database_name=DB_NAME, table_name=symbol, val=values)
+            end_time = datetime.datetime.now()
+            logging.info(f"Data storage time: {end_time - start_time} seconds")
 
+            start_time = datetime.datetime.now()
             volumes = get_values(conn=CONNECTION, database_name=DB_NAME, table_name=symbol, intrvl=PERIOD_OF_TIME)
             sum_bids_vol = 0
             sum_asks_vol = 0
@@ -85,7 +95,7 @@ async def monitoring(client, symbol):
 
             with open("notification_template.txt", "r", encoding="utf-8") as f:
                 notification_template = f.read()
-
+        
             vol_deviation_bids = (abs(avg_weighted_vol_bids - volumes_plus_2)/avg_weighted_vol_bids) * 100
             vol_deviation_asks = (abs(avg_weighted_vol_asks - volumes_minus_2) / avg_weighted_vol_asks) * 100
             if vol_deviation_bids >= VOLUMES_DIFF_LIMIT or vol_deviation_asks >= VOLUMES_DIFF_LIMIT:
@@ -102,7 +112,8 @@ async def monitoring(client, symbol):
                     period=PERIOD_OF_TIME
                 )
                 loop.call_soon(asyncio.create_task, send_message(text=notification_message, chat_id=CHAT_ID))
-
+            end_time = datetime.datetime.now()
+            logging.info(f"Checking for deviations in volume data from the weighted average: {end_time - start_time} seconds")
 
 async def main():
     client = await AsyncClient.create(api_key=API_KEY, api_secret=SECRET_KEY)
