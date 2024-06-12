@@ -10,7 +10,7 @@ This system is designed to monitor the orderbook for selected cryptocurrency pai
 - **Telegram Notifications:** If the current order volume deviates significantly from the volume-weighted average value over a specified period, a notification is sent to a designated Telegram group using the `python-telegram-bot` library.
 - **Parallel Data Processing:** The system processes data from different currency pairs in parallel using asyncio tasks.
 - **Configuration Management:** System parameters, such as Binance API keys, database connection details, notification thresholds, and Telegram bot settings, are loaded from a `settings.json` file.
-- **Performance Monitoring:** The system logs information about significant order volume deviations to the console.
+- **Performance Monitoring:** The system logs information about significant order volume deviations to the `performance.log` file.
 
 ## System Architecture
 
@@ -23,7 +23,7 @@ The system consists of the following main components:
 - **Notification Module:** Generates and sends notifications to the designated Telegram group using the `python-telegram-bot` library when anomalies are detected.
 - **Parallel Processing:** Implements parallel processing using asyncio tasks to handle data processing for multiple currency pairs concurrently.
 - **Configuration Manager:** Loads system configurations from the `settings.json` file.
-- **Performance Monitoring:** Logs information about significant order volume deviations to the console.
+- **Performance Monitoring:** Logs information about significant order volume deviations to the `performance.log` file.
 
 ## Installation and Setup
 
